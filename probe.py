@@ -1,49 +1,63 @@
+"""This module contains a code example related to
+Think Python, 2nd Edition
+by Allen Downey
+http://thinkpython2.com
+Copyright 2015 Allen Downey
+License: http://creativecommons.org/licenses/by/4.0/
+"""
 
-class Pet:
-    """ Домашнее животное """
-    legs = 4
-    has_tail = True
+from __future__ import print_function, division
 
-    def __init__(self, name):
+"""
+WARNING: this program contains a NASTY bug.  I put
+it there on purpose as a debugging exercise, but
+you DO NOT want to emulate this example!
+"""
+
+
+class Kangaroo:
+    """A Kangaroo is a marsupial."""
+
+    def __init__(self, name, contents=None):
+        """Initialize the pouch contents.
+        name: string
+        contents: initial pouch contents.
+        """
         self.name = name
+        if contents == None:
+            contents = []
+        self.pouch_contents = contents
 
-    def inspect(self):
-        print(self.__class__.__name__, self.name)  # ссылка на класс объекта и далее на имя класса
-        print('  Всего ног:', self.legs)
-        print('  Хвост присутствует -', 'да' if self.has_tail else 'нет')
-        print(self.__dict__)  # подкапотный словарь атрибутов и методов
+    def __str__(self):
+        """Return a string representaion of this Kangaroo.
+        """
+        t = [self.name + ' has pouch contents:']
+        for obj in self.pouch_contents:
+            s = '    ' + object.__str__(obj)
+            t.append(s)
+        return '\n'.join(t)
 
-
-class Cat(Pet):
-    """ Кошка - является Домашним Животным """
-
-    def sound(self):
-        print('Мяу!')
-
-
-class Dog(Pet):
-    """ Собака - является Домашним Животным """
-
-    def sound(self):
-        print('Гав!')
-
-
-class Hamster(Pet):
-    """ Хомячок - является Домашним Животным """
-
-    def sound(self):
-        print('Ццццццц!')  # https://goo.gl/KXoj21
+    def put_in_pouch(self, item):
+        """Adds a new item to the pouch contents.
+        item: object to be added
+        # """
+        if isinstance(item, Kangaroo):
+            for obj in item.pouch_contents:
+                self.pouch_contents.append(obj)
+        else:
+            self.pouch_contents.append(item)
 
 
-pet = Pet(name="Кузя")
-print(pet.__class__ is Pet)
-pet.inspect()
+kanga = Kangaroo('Kanga')
+roo = Kangaroo('Roo', ['1', '2'])
+kanga.put_in_pouch('wallet')
+kanga.put_in_pouch('car keys')
+kanga.put_in_pouch(roo)
 
 
-class Bobtail(Cat):
-    """ Бобтейл - является Кошкой """
-    has_tail = False
+print(kanga)
+print(roo)
+# If you run this program as is, it seems to work.
+# To see the problem, trying printing roo.
 
-
-my_pet = Bobtail(name = "123")
-my_pet.inspect()
+# Hint: to find the problem try running pylint.
