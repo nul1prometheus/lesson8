@@ -141,6 +141,26 @@ class Deck:
         for i in range(num):
             hand.add_card(self.pop_card())
 
+    def deal_hands(self, number_of_players, number_of_cards):
+        list_of_players = []
+        players = []
+        try:
+            for k in range(1, number_of_players+1):
+                players.append(str(k))
+            self.shuffle()
+            for i in players:
+                list_of_players.append(Hand(("player" + i)))
+            # print(list_of_players)
+            for j in list_of_players:
+                self.move_cards(j, number_of_cards)
+            return list_of_players
+        except IndexError:
+            list_of_players = []
+            for i in players:
+                list_of_players.append(Hand(("player" + i)))
+            print("Not enough cards")
+            return list_of_players
+
 
 deck = Deck()
 # print(len(deck.cards))
@@ -155,6 +175,19 @@ class Hand(Deck):
         self.cards = []
         self.label = label
 
+    def __str__(self):
+        res = []
+        res.append(self.label)
+        for card in self.cards:
+            res.append(str(card))
+        return '\n'.join(res)
+
+
 
 hand = Hand('new hand')
-print(hand.label)
+# print(hand.label)
+list_of_players1 = Deck.deal_hands(deck, 3, 25)
+# print(Deck.deal_hands(deck, 3, 6))
+for i in list_of_players1:
+    print(i)
+
